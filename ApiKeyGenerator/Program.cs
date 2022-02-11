@@ -16,6 +16,7 @@ namespace ApiKeyGenerator
             Console.WriteLine("Api key URL Safe Before NET 6 {0}", apiKey.GenerateApiKeyBeforeNet6());
             Console.WriteLine("Api key URL Safe NET 6 {0}", apiKey.GenerateApiKey());
             Console.WriteLine("Api key Sha 256 {0}", apiKey.GenerateSha256("secret"));
+            Console.WriteLine("Sha 256 {0}", apiKey.Sha256("secret"));
         }
     }
 
@@ -81,6 +82,17 @@ namespace ApiKeyGenerator
                 builder.Append(bytes[i].ToString("x2"));
             }
             return builder.ToString();
+        }
+
+        public string Sha256(string input)
+        {
+            using (var sha = SHA256.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(input);
+                var hash = sha.ComputeHash(bytes);
+
+                return Convert.ToBase64String(hash);
+            }
         }
     }
 }
